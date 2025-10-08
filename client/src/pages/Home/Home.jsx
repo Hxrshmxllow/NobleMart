@@ -8,9 +8,9 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState(null);
 
-  useEffect(() => {
+  /*useEffect(() => {
     api.get("/products").then((res) => setProducts(res.data));
-  }, []);
+  }, []);*/
 
   return (
     <div className="home">
