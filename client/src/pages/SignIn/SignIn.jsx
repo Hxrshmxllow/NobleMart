@@ -1,11 +1,12 @@
 import { useState } from "react";
 import "./SignIn.css";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,7 +20,7 @@ export default function SignIn({ onLogin }) {
     console.log("Logging in:", { email, password });
     setError("");
     if (onLogin) onLogin(email);
-    alert("✅ Signed in successfully!");
+    navigate("/admin");
   };
 
   return (

@@ -1,0 +1,67 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background: #f9fafb;
+  font-family: "Inter", sans-serif;
+  color: #111;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.dashboard-content {
+  padding-top: 1rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.top-products {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.top-products h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #e02575;
+  margin-bottom: 1rem;
+}
+
+.top-products ul {
+  list-style: none;
+  padding: 0;
+}
+
+.top-products li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.fade-in {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

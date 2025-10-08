@@ -1,20 +1,19 @@
-import { Link, useLocation } from "react-router-dom";
-import "./Navbar.css";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import "./Navbar.css";
 
 export default function Navbar() {
   const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isActive = (path) => location.pathname === path ? "active" : "";
+  const isActive = (path) => (location.pathname === path ? "active" : "");
 
   return (
     <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
@@ -25,12 +24,15 @@ export default function Navbar() {
 
         <nav className="navbar-links">
           <Link to="/" className={isActive("/")}>Home</Link>
+          <Link to="/shop" className={isActive("/shop")}>Shop</Link>
           <Link to="/cart" className={isActive("/cart")}>Cart</Link>
           <Link to="/about" className={isActive("/about")}>About</Link>
         </nav>
 
         <div className="navbar-actions">
-          <button className="sign-btn" onClick={() => navigate('/signin')}>Sign In</button>
+          <button className="sign-btn" onClick={() => navigate("/signin")}>
+            Sign In
+          </button>
         </div>
       </div>
     </header>

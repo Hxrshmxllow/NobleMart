@@ -1,0 +1,40 @@
+.admin-sidebar {
+  width: 230px;
+  background: #fff;
+  border-right: 1px solid #eee;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+}
+
+.admin-logo {
+  color: #e02575;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.admin-link {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  font-weight: 500;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.admin-link:hover {
+  background: rgba(224, 37, 117, 0.08);
+  color: #e02575;
+}
+
+.admin-link.active {
+  background: #e02575;
+  color: #fff;
+}

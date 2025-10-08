@@ -1,0 +1,26 @@
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-topbar h2 {
+  font-size: 1.4rem;
+  color: #111;
+  font-weight: 600;
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-profile img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
