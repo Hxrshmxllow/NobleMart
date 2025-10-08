@@ -1,0 +1,141 @@
+.checkout-summary {
+  flex: 1;
+  position: sticky;
+  top: 6rem;
+  align-self: flex-start;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.8s ease;
+}
+
+.checkout-summary.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.summary-box {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.summary-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+}
+
+.summary-box h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.summary-line,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.summary-total {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  border-top: 1px solid #eaeaea;
+  padding-top: 0.8rem;
+}
+
+.summary-line.discount {
+  color: #e02575;
+}
+
+
+.promo-box {
+  display: flex;
+  margin-top: 1.5rem;
+  gap: 0.5rem;
+}
+
+.summary-box .promo-box {
+  margin-bottom: 1rem;
+}
+
+.summary-box .checkout-btn {
+  margin-top: 1.5rem;
+}
+
+.promo-box input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.promo-box input:focus {
+  border-color: #e02575;
+}
+
+.promo-box button {
+  background: #e02575;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(224, 37, 117, 0.3);
+}
+
+.promo-box button:hover {
+  background: #c81d66;
+}
+
+.promo-feedback {
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+  text-align: left;
+  color: #333;
+  animation: fadeIn 0.4s ease;
+}
+
+.checkout-btn {
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem 1.6rem;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 1.8rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.checkout-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .checkout-summary {
+    position: static;
+    width: 100%;
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  .checkout-summary.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

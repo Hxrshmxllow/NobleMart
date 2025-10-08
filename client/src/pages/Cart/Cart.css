@@ -1,0 +1,125 @@
+.cart {
+  padding: 4rem 8%;
+  background: linear-gradient(180deg, #fff 0%, #f6f7f9 100%);
+  min-height: 90vh;
+  overflow-x: hidden;
+}
+
+.cart-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #e02575;
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: fadeInDown 0.6s ease forwards;
+}
+
+.cart-empty {
+  text-align: center;
+  color: #555;
+  font-size: 1.1rem;
+  margin-top: 4rem;
+}
+
+/* Layout: items on left, summary sticky on right */
+.cart-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.cart-list {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Sticky order summary */
+.cart-summary {
+  flex: 1;
+  position: sticky;
+  top: 6rem;
+  align-self: flex-start;
+}
+
+.summary-box {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  animation: fadeInRight 0.6s ease forwards;
+}
+
+.summary-box h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.summary-line,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.summary-total {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  border-top: 1px solid #eaeaea;
+  padding-top: 0.8rem;
+}
+
+.checkout-btn {
+  background: #e02575;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem 1.6rem;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 1.6rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(224, 37, 117, 0.3);
+}
+
+.checkout-btn:hover {
+  background: #c81d66;
+  box-shadow: 0 6px 18px rgba(224, 37, 117, 0.45);
+  transform: translateY(-2px);
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+
+  .cart-summary {
+    position: static;
+    width: 100%;
+  }
+}

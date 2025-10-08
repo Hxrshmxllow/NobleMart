@@ -1,0 +1,157 @@
+.home {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: #111;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5rem 8%;
+  background: linear-gradient(120deg, #fff 0%, #f7f8fa 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  gap: 3rem;
+}
+
+.hero-text {
+  flex: 1;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+}
+
+.shop-btn {
+  background: #e02575;
+  color: white;
+  text-decoration: none;
+  padding: 0.9rem 1.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(224, 37, 117, 0.3);
+}
+
+.shop-btn:hover {
+  background: #c81d66;
+  box-shadow: 0 6px 14px rgba(224, 37, 117, 0.4);
+}
+
+.hero-image {
+  flex: 1;
+  max-width: 500px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 1s ease forwards;
+}
+
+.collection {
+  padding: 5rem 8%;
+  text-align: center;
+  background-color: #fff;
+}
+
+.collection-header {
+  max-width: 650px;
+  margin: 0 auto 3rem auto;
+}
+
+.collection-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #e02575;
+  margin-bottom: 1rem;
+  letter-spacing: 0.3px;
+}
+
+.collection-header p {
+  color: #555;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2.5rem;
+  justify-items: center;
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #e02575;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2.5rem;
+  justify-items: center;
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 3rem 5%;
+  }
+
+  .hero-text h1 {
+    font-size: 2.4rem;
+  }
+
+  .hero-image {
+    width: 100%;
+    max-width: 100%;
+  }
+}
