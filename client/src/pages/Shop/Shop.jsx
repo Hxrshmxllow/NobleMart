@@ -3,6 +3,7 @@ import api from "../../api";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import ProductModal from "../../components/ProductModal/ProductModal";
 import "./Shop.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Shop() {
   const categories = [
@@ -14,13 +15,39 @@ export default function Shop() {
     "Luxury",
     "Discovery Sets",
   ];
-
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    api.get("/products").then((res) => setProducts(res.data));
+    const fetchProducts = async () => {
+      try {
+        const cached = localStorage.getItem("productsCache");
+        const cacheTTL = 60 * 60 * 1000; 
+        const now = Date.now();
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (now - parsed.timestamp < cacheTTL) {
+            console.log("🟢 Using cached products");
+            setProducts(parsed.data);
+            return;
+          }
+        }
+        console.log("Fetching products from API...");
+        const res = await api.get("/products");
+        const products = res.data.items || res.data;
+        setProducts(products);
+        localStorage.setItem(
+          "productsCache",
+          JSON.stringify({ data: products, timestamp: now })
+        );
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const filteredProducts =
@@ -54,9 +81,9 @@ export default function Shop() {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((p, index) => (
             <ProductCard
-              key={p.id}
+              key={p.upc}
               product={p}
-              onClick={() => setSelectedProduct(p)}
+              onClick={() => navigate(`/product/${p.upc}`)}
               delay={index * 100}
             />
           ))

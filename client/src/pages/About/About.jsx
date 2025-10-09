@@ -13,7 +13,7 @@ export default function About() {
           </p>
         </div>
         <img
-          src="/assets/fragrance-display.jpg"
+          src="/fragrance-display.jpg"
           alt="Luxury perfume bottles"
           className="about-hero-image fade-in"
         />
@@ -62,7 +62,7 @@ export default function About() {
       <section className="about-cta">
         <h2>Find Your Signature Scent</h2>
         <p>Explore our curated collections and discover the fragrance that defines you.</p>
-        <a href="/collection" className="cta-btn">Shop Now →</a>
+        <a href="/shop" className="cta-btn">Shop Now →</a>
       </section>
     </div>
   );

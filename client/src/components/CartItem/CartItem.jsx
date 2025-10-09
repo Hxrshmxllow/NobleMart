@@ -1,9 +1,9 @@
 import "./CartItem.css";
 
-export default function CartItem({ item, onQuantityChange, onRemove, delay }) {
+export default function CartItem({ item, updateQuantity, onRemove, delay }) {
   return (
     <div
-      id={`item-${item.id}`}
+      id={`item-${item.upc}`}
       className="cart-item"
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -19,17 +19,17 @@ export default function CartItem({ item, onQuantityChange, onRemove, delay }) {
         <div className="quantity-control">
           <button
             onClick={() =>
-              onQuantityChange(item.id, Math.max(1, item.quantity - 1))
+              updateQuantity(item.upc, Math.max(1, item.quantity - 1))
             }
           >
             −
           </button>
           <span>{item.quantity}</span>
-          <button onClick={() => onQuantityChange(item.id, item.quantity + 1)}>
+          <button onClick={() => updateQuantity(item.upc, item.quantity + 1)}>
             +
           </button>
         </div>
-        <button className="remove-btn" onClick={() => onRemove(item.id)}>
+        <button className="remove-btn" onClick={() => onRemove(item.upc)}>
           Remove
         </button>
       </div>

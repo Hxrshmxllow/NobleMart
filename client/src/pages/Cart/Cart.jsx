@@ -8,50 +8,60 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [promo, setPromo] = useState(null);
 
+  const updateQuantity = (upc, newQty) => {
+    setCartItems((prev) => {
+      let updated;
+
+      if (newQty <= 0) {
+        updated = prev.filter((item) => item.upc !== upc);
+      } else {
+        updated = prev.map((item) =>
+          item.upc === upc ? { ...item, quantity: newQty } : item
+        );
+      }
+      localStorage.setItem("cart", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const removeItem = (upc) => {
+  setCartItems((prev) => {
+    const updated = prev.filter((item) => item.upc !== upc);
+    localStorage.setItem("cart", JSON.stringify(updated)); 
+    return updated;
+  });
+};
+
   useEffect(() => {
-    // Replace with api.get("/cart") later
-    setTimeout(() => {
-      setCartItems([
-        {
-          id: 1,
-          name: "Versace Eros",
-          brand: "Versace",
-          price: 89.99,
-          quantity: 1,
-          image: "/placeholder.png",
-        },
-        {
-          id: 2,
-          name: "Dior Sauvage",
-          brand: "Dior",
-          price: 119.99,
-          quantity: 2,
-          image: "/placeholder.png",
-        },
-      ]);
-    }, 300);
+    try {
+      const savedCart = localStorage.getItem("cart");
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart);
+        const normalized = parsed.map((item) => ({
+          ...item,
+          price: parseFloat(item.price) || 0,
+        }));
+
+        setCartItems(normalized);
+      }
+    } catch (err) {
+      console.error("Failed to load cart:", err);
+    }
   }, []);
 
-  const updateQuantity = (id, newQty) => {
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity: newQty } : item))
-    );
-  };
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
 
-  const removeItem = (id) => {
-    const card = document.querySelector(`#item-${id}`);
-    card.classList.add("fade-out");
-    setTimeout(() => {
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
-    }, 300);
-  };
 
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + (parseFloat(item.price) || 0) * (item.quantity || 1),
     0
   );
 
-  const tax = subtotal * 0.07; // Example 7% tax
+  const tax = subtotal * 0.07;
   const shipping = subtotal > 100 ? 0 : 9.99;
   const discount = promo === "SAVE10" ? subtotal * 0.1 : 0;
   const total = subtotal + tax + shipping - discount;
@@ -67,9 +77,9 @@ export default function Cart() {
           <div className="cart-list">
             {cartItems.map((item, index) => (
               <CartItem
-                key={item.id}
+                key={item.upc}
                 item={item}
-                onQuantityChange={updateQuantity}
+                updateQuantity={updateQuantity}
                 onRemove={removeItem}
                 delay={index * 100}
               />

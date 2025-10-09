@@ -8,6 +8,8 @@ export default function ProductPage() {
   const [product, setProduct] = useState(null);
   const [showNotes, setShowNotes] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [adding, setAdding] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -20,6 +22,33 @@ export default function ProductPage() {
     };
     fetchProduct();
   }, [upc]);
+
+  const handleAddToCart = (product) => {
+    setAdding(true);
+    setMessage("");
+    try {
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = existingCart.find((item) => item.upc === product.upc);
+      let updatedCart;
+      if (existingItem) {
+        updatedCart = existingCart.map((item) =>
+          item.upc === product.upc
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        updatedCart = [...existingCart, { ...product, quantity: 1 }];
+      }
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+      setMessage("Added to cart!");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      setMessage("Error adding item.");
+    } finally {
+      setAdding(false);
+    }
+  };
 
   const handleToggleNotes = () => {
     if (!showNotes && notes.length === 0) {
@@ -50,7 +79,15 @@ export default function ProductPage() {
           <p className="description">{product.description}</p>
           <p className="size"><strong>Size:</strong> {product.size || "N/A"}</p>
           <p className="upc"><strong>UPC:</strong> {product.upc}</p>
-          <button className="add-to-cart">Add to Cart</button>
+          <button
+            className="add-to-cart"
+            onClick={() => handleAddToCart(product)}
+            disabled={adding}
+          >
+            {adding ? "Adding..." : "Add to Cart"}
+          </button>
+
+          {message && <p className="cart-message">{message}</p>}
 
           {/* AI Scent Notes */}
           <div className="ai-notes">
