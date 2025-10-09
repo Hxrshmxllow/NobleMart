@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models.product_model import get_products_by_category, get_all_products
+from app.models.product_model import get_products_by_category, get_all_products, get_product
 
 products_bp = Blueprint("products", __name__)
 
@@ -18,3 +18,11 @@ def get_products():
         return jsonify({"error": "Invalid startKey"}), 400
     result = get_all_products(start_key)
     return jsonify(result), 200
+
+@products_bp.route("/<string:upc>", methods=["GET"])
+def get_product_by_upc(upc):
+    product = get_product(upc)
+    if product:
+        return jsonify(product), 200
+    else:
+        return jsonify({"error": "Product not found"}), 404

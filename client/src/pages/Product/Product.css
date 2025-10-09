@@ -1,0 +1,180 @@
+.product-page {
+  padding: 3rem 2rem;
+  background: #fefefe;
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .product-container {
+    flex-direction: row;
+  }
+}
+
+.product-image img {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+}
+
+.product-details {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.product-details h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #111;
+}
+
+.product-details .brand {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.product-details .price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #e02575;
+  margin-bottom: 1rem;
+}
+
+.product-details .description {
+  line-height: 1.6;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.product-details .size,
+.product-details .upc {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.add-to-cart {
+  background: #e02575;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  margin-top: 1rem;
+}
+
+.add-to-cart:hover {
+  background: #c81d66;
+}
+
+.ai-notes {
+  margin-top: 3rem;
+  border-top: 1px solid #ddd;
+  padding-top: 2rem;
+}
+
+.ai-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-notes-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.toggle-notes-btn {
+  background: none;
+  border: none;
+  color: #e02575;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.toggle-notes-btn:hover {
+  color: #c81d66;
+}
+
+.notes-content {
+  margin-top: 1.5rem;
+  display: none;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.notes-content.visible {
+  display: flex;
+}
+
+.note-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-bar span {
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.progress-bar {
+  height: 12px;
+  background: #f3f4f6;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(to right, #e02575, #ff8db2);
+  border-radius: 6px;
+  animation: growBar 0.8s ease-out forwards;
+}
+
+@keyframes growBar {
+  to {
+    width: var(--target-width);
+  }
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 2rem;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

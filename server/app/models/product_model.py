@@ -31,3 +31,11 @@ def get_all_products(start_key=None):
     except Exception as e:
         print("Error getting all products:", e)
         return {"items": [], "nextKey": None}
+    
+def get_product(upc):
+    try:
+        response = products_table.get_item(Key={"upc": upc})
+        return response.get("Item")
+    except Exception as e:
+        print(f"Error fetching product with UPC {upc}: {e}")
+        return None

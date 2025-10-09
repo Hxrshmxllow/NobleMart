@@ -1,8 +1,8 @@
 .product-card {
   width: 240px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(224, 37, 117, 0.08);
   text-align: center;
   overflow: hidden;
   cursor: pointer;
@@ -10,16 +10,20 @@
   opacity: 0;
   animation: slideUp 0.6s ease forwards;
   transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 390px;
 }
 
 .product-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(224, 37, 117, 0.15);
   filter: brightness(1.02);
 }
 
 .product-image-wrapper {
-  background: linear-gradient(135deg, #f7f7f7 0%, #fff 100%);
+  background: linear-gradient(135deg, #fdf2f8 0%, #fff 100%);
   padding: 1.2rem;
   height: 240px;
   display: flex;
@@ -39,27 +43,42 @@
 }
 
 .product-info {
-  padding: 1rem 1rem 1.5rem;
+  padding: 1rem 1rem 1.4rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .product-info h3 {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  color: #111827;
+  margin-bottom: 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* limits to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2rem;
+  height: 2.4rem;             /* 1.2rem * 2 lines */
 }
 
 .product-brand {
-  color: #777;
-  font-size: 0.9rem;
-  margin-bottom: 0.4rem;
+  color: #9d174d;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .product-price {
-  color: #111;
-  font-weight: bold;
+  color: #e02575;
+  font-weight: 700;
   font-size: 1rem;
+  margin-top: auto;
 }
 
+/* Animation */
 @keyframes slideUp {
   0% {
     transform: translateY(20px);

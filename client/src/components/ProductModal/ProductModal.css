@@ -2,89 +2,172 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 50;
+  padding: 1rem; 
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .modal {
-  background: #fff;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 900px;
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 720px;
   position: relative;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 1.8rem;
+  box-shadow: 0 8px 32px rgba(224, 37, 117, 0.15);
+  animation: slideUp 0.35s ease forwards;
+  font-family: "Inter", sans-serif;
 }
 
+/* CLOSE BUTTON */
 .modal-close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
+  top: 12px;
+  right: 16px;
+  font-size: 1.8rem;
   background: none;
   border: none;
-  color: #555;
+  color: #9ca3af;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
+.modal-close:hover {
+  color: #e02575;
+}
+
+/* FLEX LAYOUT */
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
   .modal-content {
     flex-direction: row;
+    align-items: center;
   }
 }
 
+/* IMAGE */
 .modal-img {
   flex: 1;
+  max-height: 360px;
   object-fit: contain;
-  max-height: 350px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fff 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  transition: transform 0.3s ease;
 }
 
+.modal-img:hover {
+  transform: scale(1.03);
+}
+
+/* INFO SECTION */
 .modal-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.modal-info h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.modal-info p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .modal-price {
-  color: #0078ff;
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
+  color: #e02575;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0.6rem 0 0.8rem;
+}
+
+/* DESCRIPTION */
+.modal-desc {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* SIZE BUTTONS */
+.modal-sizes {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 .modal-sizes button {
-  margin-right: 0.5rem;
+  border: 1.5px solid #f2c9db;
+  border-radius: 8px;
+  background: #fff;
+  color: #e02575;
+  font-weight: 500;
   padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: white;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .modal-sizes button:hover {
-  background: #eee;
+  background: #fdf2f8;
+  box-shadow: 0 2px 6px rgba(224, 37, 117, 0.15);
+  transform: translateY(-2px);
 }
 
+/* ADD TO CART BUTTON */
 .modal-add {
-  background: #0078ff;
+  background: #e02575;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.7rem;
-  cursor: pointer;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
   font-size: 1rem;
-  transition: background 0.2s ease;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(224, 37, 117, 0.25);
+  margin-top: auto;
 }
 
 .modal-add:hover {
-  background: #005fcc;
+  background: #c81d66;
+  transform: translateY(-2px);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

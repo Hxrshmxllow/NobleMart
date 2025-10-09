@@ -12,38 +12,41 @@ export default function UploadProduct() {
     e.preventDefault();
     setStatus("Fetching product info...");
     try {
-      // mock API call (replace with your real one later)
-      const mockResponse = {
-        name: "Dior Sauvage Eau de Toilette",
-        brand: "Dior",
-        size: "100ml",
-        description:
-          "A bold and fresh fragrance with bergamot, pepper, and amberwood notes — a timeless masculine classic.",
-        upc,
-        price: "149.99",
-        image:
-          "https://www.dior.com/dw/image/v2/BGXS_PRD/on/demandware.static/-/Sites-master_dior/default/dw3f6987c5/Y0785220/Y0785220_F078524009_E01_GHC.jpg?sw=800",
-      };
-      await new Promise((r) => setTimeout(r, 800)); 
+      const res = await api.post("/admin/fetch-product", { upc });
 
-      setProductData(mockResponse);
-      setShowModal(true);
-      setStatus("");
-    } catch {
-      setStatus("❌ Error fetching product info.");
+      if (res.status === 200) {
+        setProductData(res.data);
+        setShowModal(true);
+        setStatus("");
+      } else {
+        setStatus("Product not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setStatus("Error fetching product info.");
     }
   };
 
   const handleConfirmUpload = async () => {
+    if (!productData?.price || !productData?.size) {
+      setStatus("Please enter both price and size before uploading.");
+      return;
+    }
+
     setStatus("Uploading...");
+
     try {
-      //await api.post("/admin/products", productData);
-      setStatus("✅ Product uploaded successfully!");
+      const uploadData = { ...productData, upc };
+
+      await api.post("/admin/upload-product", uploadData);
+
+      setStatus("Product uploaded successfully!");
       setShowModal(false);
       setProductData(null);
       setUpc("");
-    } catch {
-      setStatus("❌ Error uploading product.");
+    } catch (error) {
+      console.error("Error uploading product:", error);
+      setStatus("Error uploading product.");
     }
   };
 
@@ -71,7 +74,6 @@ export default function UploadProduct() {
       {showModal && productData && (
   <div className="upload-modal">
     <div className="upload-modal-content horizontal">
-      {/* LEFT: IMAGE + INFO */}
       <div className="modal-left">
         <img
           src={productData.image}
@@ -79,12 +81,20 @@ export default function UploadProduct() {
           className="modal-image"
         />
         <div className="modal-info">
-          <p><strong>UPC:</strong> {productData.upc}</p>
-          <p><strong>Size:</strong> {productData.size}</p>
+          <p><strong>UPC:</strong> {upc}</p>
+
+          <div className="floating-label-input">
+            <input
+              type="text"
+              id="size"
+              value={productData.size || ""}
+              onChange={(e) => handleChange("size", e.target.value)}
+              placeholder=" " 
+            />
+            <label htmlFor="size">Size</label>
+          </div>
         </div>
       </div>
-
-      {/* RIGHT: EDITABLE FORM */}
       <div className="modal-right">
         <h3>Edit Product Details</h3>
         <div className="modal-form">
@@ -106,7 +116,7 @@ export default function UploadProduct() {
           <input
             type="number"
             step="0.01"
-            value={productData.price}
+            value={productData.price || ""}
             onChange={(e) => handleChange("price", e.target.value)}
           />
 
@@ -126,6 +136,7 @@ export default function UploadProduct() {
           </button>
         </div>
       </div>
+      {status && <p className="upload-status">{status}</p>}
     </div>
     <div className="upload-modal-overlay" onClick={() => setShowModal(false)} />
   </div>

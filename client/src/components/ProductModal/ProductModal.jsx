@@ -14,10 +14,12 @@ export default function ProductModal({ product, onClose }) {
             alt={product.name}
             className="modal-img"
           />
+
           <div className="modal-info">
             <h2>{product.name}</h2>
             <p>{product.brand}</p>
             <p className="modal-price">${product.price}</p>
+
             <p className="modal-desc">
               {product.description || "Premium fragrance from NobleMart."}
             </p>

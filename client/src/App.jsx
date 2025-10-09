@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Shop from "./pages/Shop/Shop";
 import Admin from "./pages/Admin/Admin"
+import Product from "./pages/Product/Product"
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/product/:upc" element={<Product />} />
         </Routes>
       </main>
       <Footer />

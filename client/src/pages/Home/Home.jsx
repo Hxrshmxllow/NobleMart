@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import ProductModal from "../../components/ProductModal/ProductModal";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState(null);
-
-  /*useEffect(() => {
-    api.get("/products").then((res) => setProducts(res.data));
-  }, []);*/
+  const navigate = useNavigate();
+  useEffect(() => {
+    api.get("/products").then((res) => setProducts(res.data.items));
+  }, []);
 
   return (
     <div className="home">
-      {/* Hero Section */}
       <section className="hero">
         <div className="hero-text">
           <h1>Elevate Your Essence</h1>
@@ -27,7 +27,6 @@ export default function Home() {
         <img src="/banner.jpg" alt="Fragrance Banner" className="hero-image" />
       </section>
 
-      {/* Modern Collection Section */}
       <section id="collection" className="collection">
         <div className="collection-header">
           <h2>Men’s Fragrance Collection</h2>
@@ -42,7 +41,7 @@ export default function Home() {
             <ProductCard
               key={p.id}
               product={p}
-              onClick={() => setSelected(p)}
+              onClick={() => navigate(`/product/${p.upc}`)}
               delay={index * 100}
             />
           ))}
