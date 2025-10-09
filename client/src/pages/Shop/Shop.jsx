@@ -10,15 +10,32 @@ export default function Shop() {
     "All",
     "Men's",
     "Women's",
-    "Unisex",
-    "Gifts",
-    "Luxury",
-    "Discovery Sets",
+    "Mini",
+    "Gift Sets",
+    "Bath & Body",
   ];
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState("All Brands");
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (brand) => {
+    setSelectedBrand(brand);
+    setOpen(false);
+  };
+
+  const sampleBrands = [
+    "Versace",
+    "Dior",
+    "Chanel",
+    "Gucci",
+    "Tom Ford",
+    "Armani",
+    "YSL",
+    "Burberry",
+  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,6 +67,29 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
+  /*useEffect(() => {
+    const fetchFiltered = async () => {
+      let endpoint = "/products";
+      const params = [];
+
+      if (selectedCategory !== "All") {
+        params.push(`category=${encodeURIComponent(selectedCategory)}`);
+      }
+      if (selectedBrand) {
+        params.push(`brand=${encodeURIComponent(selectedBrand)}`);
+      }
+
+      if (params.length > 0) {
+        endpoint += `?${params.join("&")}`;
+      }
+
+      const res = await api.get(endpoint);
+      setProducts(res.data.items || res.data);
+    };
+
+    fetchFiltered();
+  }, [selectedCategory, selectedBrand]);*/
+
   const filteredProducts =
     selectedCategory === "All"
       ? products
@@ -62,18 +102,47 @@ export default function Shop() {
     <div className="shop-page">
       <section className="shop-filters fade-in">
         <h1 className="shop-title">Shop Fragrances</h1>
+
         <div className="filter-bar">
-          {categories.map((cat) => (
+          <div className="categories">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                className={`filter-btn ${
+                  selectedCategory === cat ? "active" : ""
+                }`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="brand-dropdown-wrapper">
             <button
-              key={cat}
-              className={`filter-btn ${
-                selectedCategory === cat ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory(cat)}
+              className="brand-select"
+              onClick={() => setOpen(!open)}
             >
-              {cat}
+              {selectedBrand}
+              <span className="arrow">{open ? "▲" : "▼"}</span>
             </button>
-          ))}
+
+            {open && (
+              <ul className="brand-menu">
+                {sampleBrands.map((brand) => (
+                  <li
+                    key={brand}
+                    className={`brand-option ${
+                      brand === selectedBrand ? "active" : ""
+                    }`}
+                    onClick={() => handleSelect(brand)}
+                  >
+                    {brand}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </section>
 

@@ -23,7 +23,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .filter-btn {
@@ -39,6 +39,12 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
 }
 
+.categories {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .filter-btn:hover {
   border-color: #e02575;
   color: #e02575;
@@ -50,6 +56,87 @@
   color: white;
   border-color: #e02575;
   box-shadow: 0 4px 12px rgba(224, 37, 117, 0.25);
+}
+
+.brand-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.brand-select {
+  background: #fff;
+  border: 1.5px solid #ddd;
+  border-radius: 50px;
+  padding: 0.7rem 1.6rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-select:hover {
+  border-color: #e02575;
+  color: #e02575;
+  transform: translateY(-2px);
+}
+
+.brand-select .arrow {
+  font-size: 0.8rem;
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+/* Dropdown menu styling */
+.brand-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: max-content;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0;
+  z-index: 1000;
+  animation: fadeInUp 0.25s ease;
+}
+
+.brand-option {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.brand-option:hover {
+  background: #fef1f7;
+  color: #e02575;
+}
+
+.brand-option.active {
+  background: #e02575;
+  color: white;
+}
+
+/* Subtle open animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- Product Grid --- */

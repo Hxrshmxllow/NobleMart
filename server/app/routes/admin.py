@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from ..models.dynamo_model import put_product
 from app.utils.upc_lookup import retrieveItemData
 from decimal import Decimal, ROUND_HALF_UP
+from app.utils.ai_util import clean_product_with_ai
+
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -28,7 +30,9 @@ def fetch_product():
         return jsonify({"error": "UPC code required"}), 400
 
     product_data = retrieveItemData(upc)
-    if product_data:
-        return jsonify(product_data), 200
-    else:
+    if not product_data:
         return jsonify({"error": "Product not found"}), 404
+    url = product_data['image']
+    cleaned_product = clean_product_with_ai(product_data, upc=upc)
+    cleaned_product['image'] = url
+    return jsonify(cleaned_product), 200
