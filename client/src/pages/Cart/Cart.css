@@ -21,7 +21,6 @@
   margin-top: 4rem;
 }
 
-/* Layout: items on left, summary sticky on right */
 .cart-layout {
   display: flex;
   align-items: flex-start;

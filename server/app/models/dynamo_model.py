@@ -1,6 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import os
+import time
 
 region = os.environ.get("AWS_REGION", "us-east-1")
 dynamodb = boto3.resource(
@@ -14,6 +15,7 @@ table = dynamodb.Table('Products')
 
 def put_product(item):
     try:
+        item["created_at"] = int(time.time())
         response = table.put_item(Item=item)
         return response
     except ClientError as e:

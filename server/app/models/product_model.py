@@ -68,3 +68,17 @@ def get_products_by_brand(brand):
     except Exception as e:
         print(f"Error scanning products by brand '{brand}':", e)
         return []
+    
+def fetch_new_arrivals(limit=6):
+    try:
+        response = products_table.scan()
+        items = response.get("Items", [])
+        items.sort(
+            key=lambda x: x.get("created_at", 0),
+            reverse=True
+        )
+        return items[:limit]
+
+    except Exception as e:
+        print("Error fetching new arrivals:", e)
+        return []
