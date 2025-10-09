@@ -1,11 +1,33 @@
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import api from "../../api";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import ProductModal from "../../components/ProductModal/ProductModal";
 import "./Shop.css";
 import { useNavigate } from "react-router-dom";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function Shop() {
+  const MAX_LRU_SIZE = 5;
+  const categoryCacheRef = useRef(new Map());
+
+  const getFromLRU = (key) => {
+    const cache = categoryCacheRef.current;
+    if (!cache.has(key)) return null;
+    const value = cache.get(key);
+    cache.delete(key);
+    cache.set(key, value);
+    return value;
+  };
+
+  const setToLRU = (key, data) => {
+    const cache = categoryCacheRef.current;
+    if (cache.has(key)) cache.delete(key);
+    else if (cache.size >= MAX_LRU_SIZE) {
+      const oldestKey = cache.keys().next().value;
+      cache.delete(oldestKey);
+    }
+    cache.set(key, data);
+  };
+  
   const categories = [
     "All",
     "Men's",
@@ -13,85 +35,155 @@ export default function Shop() {
     "Mini",
     "Gift Sets",
     "Bath & Body",
+    "Brand",
   ];
+
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
+  const [products, setProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loadingBrands, setLoadingBrands] = useState(true);
 
-  const handleSelect = (brand) => {
-    setSelectedBrand(brand);
-    setOpen(false);
+  const CACHE_TTL = 60 * 60 * 1000; 
+
+  const getCache = (key) => {
+    const cached = localStorage.getItem(key);
+    if (!cached) return null;
+    const parsed = JSON.parse(cached);
+    if (Date.now() - parsed.timestamp > CACHE_TTL) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return parsed.data;
   };
 
-  const sampleBrands = [
-    "Versace",
-    "Dior",
-    "Chanel",
-    "Gucci",
-    "Tom Ford",
-    "Armani",
-    "YSL",
-    "Burberry",
-  ];
+  const setCache = (key, data) => {
+    localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
+  };
+
+  const handleSelect = async (brand) => {
+    if (selectedBrand === brand) return;
+
+    setSelectedBrand(brand);
+    setSelectedCategory("Brand");
+
+    const cacheKey = `brandCache_${brand}`;
+    const cached = getCache(cacheKey);
+    if (cached) {
+      setProducts(cached);
+      console.log(`Loaded ${brand} products from cache`);
+      return;
+    }
+
+    try {
+      console.log(`Fetching ${brand} products from API...`);
+      const res = await api.get(`/products/brands/${brand}`);
+      const data = res.data.items || res.data;
+      setCache(cacheKey, data);
+      setProducts(data);
+    } catch (error) {
+      console.error("Failed to fetch brand products:", error);
+      const fallback = getCache("currBrandCache");
+      if (fallback) setProducts(fallback);
+    }
+  };
+
+  const handleCategorySelect = async (category) => {
+  setSelectedCategory(category);
+  setSelectedBrand("All Brands");
+  if (category === "All") {
+    const cached = getCache("productsCache");
+    if (cached) {
+      setProducts(cached);
+      return;
+    }
+    const res = await api.get("/products");
+    const data = res.data.items || res.data;
+    setCache("productsCache", data);
+    setProducts(data);
+    return;
+  }
+
+  const cached = getFromLRU(category);
+  if (cached) {
+    console.log(`Loaded ${category} products from LRU cache`);
+    setProducts(cached);
+    return;
+  }
+  try {
+    console.log(`Fetching ${category} products from API...`);
+    const res = await api.get(
+      `/products/category/${encodeURIComponent(category)}`
+    );
+    const data = res.data.items || res.data;
+    setProducts(data);
+    setToLRU(category, data);
+  } catch (error) {
+    console.error("Failed to fetch category products:", error);
+    setProducts([]);
+  }
+};
 
   useEffect(() => {
+    const cached = getCache("productsCache");
+    if (cached) {
+      setProducts(cached);
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
-        const cached = localStorage.getItem("productsCache");
-        const cacheTTL = 60 * 60 * 1000; 
-        const now = Date.now();
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (now - parsed.timestamp < cacheTTL) {
-            console.log("🟢 Using cached products");
-            setProducts(parsed.data);
-            return;
-          }
-        }
-        console.log("Fetching products from API...");
         const res = await api.get("/products");
-        const products = res.data.items || res.data;
-        setProducts(products);
-        localStorage.setItem(
-          "productsCache",
-          JSON.stringify({ data: products, timestamp: now })
-        );
+        const data = res.data.items || res.data;
+        setCache("productsCache", data);
+        setProducts(data);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }
     };
-
     fetchProducts();
   }, []);
 
-  /*useEffect(() => {
-    const fetchFiltered = async () => {
-      let endpoint = "/products";
-      const params = [];
+  useEffect(() => {
+    const cached = getCache("brandsCache");
+    if (cached) {
+      setBrands(cached);
+      setLoadingBrands(false);
+      return;
+    }
 
-      if (selectedCategory !== "All") {
-        params.push(`category=${encodeURIComponent(selectedCategory)}`);
+    const fetchBrands = async () => {
+      try {
+        const res = await api.get("/products/get_brands");
+        setBrands(res.data);
+        setCache("brandsCache", res.data);
+      } catch (err) {
+        console.error("Failed to fetch brands:", err);
+      } finally {
+        setLoadingBrands(false);
       }
-      if (selectedBrand) {
-        params.push(`brand=${encodeURIComponent(selectedBrand)}`);
-      }
-
-      if (params.length > 0) {
-        endpoint += `?${params.join("&")}`;
-      }
-
-      const res = await api.get(endpoint);
-      setProducts(res.data.items || res.data);
     };
 
-    fetchFiltered();
-  }, [selectedCategory, selectedBrand]);*/
+    fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        !e.target.closest(".brand-dropdown-menu") &&
+        !e.target.closest(".filter-btn")
+      ) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const filteredProducts =
-    selectedCategory === "All"
+    selectedCategory === "All" || selectedCategory === "Brand"
       ? products
       : products.filter(
           (p) =>
@@ -104,45 +196,50 @@ export default function Shop() {
         <h1 className="shop-title">Shop Fragrances</h1>
 
         <div className="filter-bar">
-          <div className="categories">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`filter-btn ${
-                  selectedCategory === cat ? "active" : ""
-                }`}
-                onClick={() => setSelectedCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div className="brand-dropdown-wrapper">
+          {categories.map((cat) => (
             <button
-              className="brand-select"
-              onClick={() => setOpen(!open)}
+              key={cat}
+              className={`filter-btn ${selectedCategory === cat ? "active" : ""}`}
+              onClick={() => {
+                if (cat === "Brand") {
+                  setOpen(!open);
+                  handleCategorySelect(cat)
+                } else {
+                  handleCategorySelect(cat);
+                  setOpen(false);
+                }
+              }}
             >
-              {selectedBrand}
-              <span className="arrow">{open ? "▲" : "▼"}</span>
-            </button>
+              {cat === "Brand" && selectedBrand !== "All Brands"
+                ? selectedBrand
+                : cat}
 
-            {open && (
-              <ul className="brand-menu">
-                {sampleBrands.map((brand) => (
-                  <li
-                    key={brand}
-                    className={`brand-option ${
-                      brand === selectedBrand ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect(brand)}
-                  >
-                    {brand}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+              {cat === "Brand" && (
+                <span className="brand-arrow">
+                  {open ? <FaChevronUp /> : <FaChevronDown />}
+                </span>
+              )}
+            </button>
+          ))}
+
+          {selectedCategory === "Brand" && open && (
+            <div className="brand-dropdown-menu">
+              {brands.map((brand) => (
+                <div
+                  key={brand}
+                  className={`brand-option ${
+                    brand === selectedBrand ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    handleSelect(brand);
+                    setOpen(false);
+                  }}
+                >
+                  {brand}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -160,13 +257,6 @@ export default function Shop() {
           <p className="no-results">No products found in this category.</p>
         )}
       </section>
-
-      {selectedProduct && (
-        <ProductModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
     </div>
   );
 }

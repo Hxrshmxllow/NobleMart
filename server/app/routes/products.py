@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models.product_model import get_products_by_category, get_all_products, get_product
+from app.models.product_model import get_products_by_category, get_all_products, get_product, get_all_brands, get_products_by_brand
 
 products_bp = Blueprint("products", __name__)
 
@@ -26,3 +26,13 @@ def get_product_by_upc(upc):
         return jsonify(product), 200
     else:
         return jsonify({"error": "Product not found"}), 404
+    
+@products_bp.route("brands/<string:brand>", methods=["GET"])
+def fetch_by_brand(brand):
+    items = get_products_by_brand(brand)
+    return jsonify(items), 200
+
+@products_bp.route("get_brands", methods=["GET"])
+def get_brands():
+    brands = get_all_brands()
+    return jsonify(brands), 200

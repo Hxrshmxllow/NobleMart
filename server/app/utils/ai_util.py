@@ -8,47 +8,51 @@ load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def clean_product_with_ai(product_data, upc=None):
-    """
-    Cleans and enriches raw product JSON using OpenAI.
+    prompt = f"""
+        You are a product data–cleaning and categorization assistant for an e-commerce backend.
 
-    - Shortens overly long names
-    - Extracts product size (e.g., '3.4 oz')
-    - Summarizes long descriptions to 30 words
-    - Classifies into one of defined product categories
-    - Optionally adds price data from an external API
-    """
+        Your goal is to transform the raw product JSON below into a clean, structured, standardized JSON object.
 
-    categories = [
+        You must follow these rules carefully:
+
+        CLEANING RULES:
+        - "name": concise and professional. Remove redundant brand, size, or format details (e.g., remove "3.4 oz", "Eau de Toilette Spray" if redundant).
+        - "size": extract from the name or description if mentioned (e.g., "3.4 oz", "100 ml"). If not found, use null.
+        - "description": rewrite or summarize to at most 30 words. Must be human-readable and marketing-friendly.
+        - "brand": keep if available.
+        - "gender": keep or infer if obvious ("Pour Homme" → male, "Pour Femme" → female, "Unisex" → neutral).
+        - Do NOT invent new fields. Keep existing ones if valid.
+
+        CATEGORY CLASSIFICATION:
+        Choose exactly ONE category from this list:
+        [
         "Men's Fragrances",
         "Women's Fragrances",
         "Mini",
         "Gift Sets",
-        "Bath & Body",
-    ]
+        "Bath & Body"
+        ]
 
-    # 🧠 Updated prompt
-    prompt = f"""
-    You are a data-cleaning assistant for an e-commerce backend.
+        Follow this hierarchy and logic for classification:
 
-    TASKS:
-    1. Clean the product JSON below.
-    2. Add/modify the following fields:
-       - "name": concise and readable, remove size or brand redundancy
-       - "size": extract from name/description if present (e.g., "3.4 oz" or "100ml")
-       - "description": summarize to at most 30 words
-       - "category": choose exactly ONE from this list:
-         Rules for classification:
-         - Use "Men's" if the fragrance is clearly for men or has masculine branding.
-         - Use "Women's" if it’s for women or has feminine branding.
-         - Use "Mini" for travel-size or miniature fragrances.
-         - Use "Gift Sets" for any set or collection with multiple items.
-         - Use "Bath & Body" for aftershaves, deodorants, lotions, creams, body mists, etc.
-       - Keep "brand" and "gender" if available.
-    3. Return **only valid JSON**, no text or commentary.
+        1. If the product mentions “set”, “gift”, “bundle”, or includes multiple items → "Gift Sets"
+        2. If the product name or size suggests travel size, mini, sample, rollerball, or “0.3 oz / 10 ml or less” → "Mini"
+        3. If it includes words like “lotion”, “cream”, “body wash”, “aftershave”, “deodorant”, “mist”, or “gel” → "Bath & Body"
+        4. Otherwise, classify as a fragrance based on gender cues:
+        - Use "Men's Fragrances" if it’s for men, labeled "Pour Homme", "Men", "Cologne", or has woody/spicy/amber notes.
+        - Use "Women's Fragrances" if it’s for women, labeled "Pour Femme", "Women", "Perfume", or has floral/fruity/vanilla notes.
+        - For "Unisex" fragrances, infer dominant tone:
+            - More woody/spicy → "Men's Fragrances"
+            - More floral/sweet → "Women's Fragrances"
 
-    Raw JSON:
-    {product_data}
-    """
+        OUTPUT REQUIREMENTS:
+        - Output only valid JSON, nothing else.
+        - Include the following fields: ["name", "brand", "size", "category", "description", "gender"]
+        - Do not add explanations or markdown, only JSON.
+
+        RAW JSON:
+        {product_data}
+        """
 
     cleaned_product = product_data
 

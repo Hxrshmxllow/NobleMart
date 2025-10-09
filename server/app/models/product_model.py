@@ -39,3 +39,32 @@ def get_product(upc):
     except Exception as e:
         print(f"Error fetching product with UPC {upc}: {e}")
         return None
+    
+def get_all_brands():
+    try:
+        brands = set()
+        scan_kwargs = {}
+        while True:
+            response = products_table.scan(**scan_kwargs)
+            for item in response.get("Items", []):
+                brand = item.get("brand")
+                if brand:
+                    brands.add(brand.strip())
+            if "LastEvaluatedKey" not in response:
+                break
+            scan_kwargs["ExclusiveStartKey"] = response["LastEvaluatedKey"]
+
+        return sorted(list(brands))
+    except Exception as e:
+        print("Error fetching all brands:", e)
+        return []
+
+def get_products_by_brand(brand):
+    try:
+        response = products_table.scan(
+            FilterExpression=Attr("brand").eq(brand)
+        )
+        return response.get("Items", [])
+    except Exception as e:
+        print(f"Error scanning products by brand '{brand}':", e)
+        return []
