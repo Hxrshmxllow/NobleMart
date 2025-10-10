@@ -1,0 +1,238 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --primary: #e02575;
+  --primary-hover: #c81d66;
+  --bg: #f4f6fa;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --card-bg: rgba(255, 255, 255, 0.9);
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+}
+
+/* ================= PAGE LAYOUT ================= */
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 1.5rem;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fb 100%);
+}
+
+.dashboard-box {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 760px;
+  padding: 2.5rem;
+  animation: fadeInUp 0.5s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= TABS ================= */
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+  gap: 1rem;
+}
+
+.tab {
+  border: none;
+  background: none;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.tab:hover {
+  background: rgba(224, 37, 117, 0.08);
+  color: var(--primary);
+}
+
+.tab.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(224, 37, 117, 0.3);
+}
+
+/* ================= TAB CONTENT ================= */
+.tab-content {
+  animation: fadeIn 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+/* ================= USER INFO ================= */
+.user-info h2,
+.orders h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.user-info label {
+  display: block;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.user-info input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.user-info input:hover:not(:disabled),
+.user-info input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(224, 37, 117, 0.15);
+  outline: none;
+}
+
+.user-info input:disabled {
+  background: #f8f8f8;
+  color: #555;
+}
+
+/* ================= BUTTONS ================= */
+.actions {
+  margin-top: 1.8rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn {
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 0.9rem 1.4rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.edit-btn {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(224, 37, 117, 0.3);
+}
+
+.edit-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.save-btn {
+  background: #16a34a;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+/* ================= ORDERS ================= */
+.orders .order-list {
+  list-style: none;
+  margin-top: 1.5rem;
+  padding: 0;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.order-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.order-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.order-item p {
+  margin: 0.25rem 0;
+}
+
+.no-orders {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 3rem;
+  font-weight: 500;
+}
+
+/* ================= MESSAGES ================= */
+.message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 640px) {
+  .dashboard-box {
+    padding: 1.8rem;
+    border-radius: 18px;
+  }
+  .tab {
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+  }
+  .user-info input {
+    font-size: 0.95rem;
+  }
+}

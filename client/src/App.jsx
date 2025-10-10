@@ -10,7 +10,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import Shop from "./pages/Shop/Shop";
 import Admin from "./pages/Admin/Admin"
 import Product from "./pages/Product/Product"
-
+import Account from "./pages/Account/Account"
 
 
 export default function App() {
@@ -28,6 +28,7 @@ export default function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/product/:upc" element={<Product />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </main>
       <Footer />

@@ -3,7 +3,7 @@ import "./SignUp.css";
 import api from "../../api";
 
 export default function SignUp() {
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", password: "", confirmPassword: "", address: ""});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -15,7 +15,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.password || !form.confirmPassword)
+    if (!form.firstName || !form.lastName || !form.email || !form.password || !form.confirmPassword || !form.address)
       return setError("Please fill out all fields.");
     if (form.password !== form.confirmPassword)
       return setError("Passwords do not match.");
@@ -25,7 +25,7 @@ export default function SignUp() {
 
     try {
       const res = await api.post("/auth/signup", {
-        name: form.name,
+        name: `${form.firstName.trim()} ${form.lastName.trim()}`,
         email: form.email,
         password: form.password,
       });
@@ -55,10 +55,28 @@ export default function SignUp() {
       });
 
       if (res.data.status === "success") {
-        setMessage("✅ Account verified! You can now sign in.");
-        setTimeout(() => (window.location.href = "/signin"), 2000);
+        setMessage("Account verified! Finalizing setup...");
+        try {
+          const dbRes = await api.post("/auth/create_user", {
+            name: `${form.firstName.trim()} ${form.lastName.trim()}`,
+            email: form.email,
+            address: form.address,
+          });
+
+          if (dbRes.data.status === "success") {
+            setMessage(
+              `Welcome ${form.name.split(" ")[0]}! Your account has been verified.`
+            );
+            setTimeout(() => (window.location.href = "/signin"), 2500);
+          } else {
+            setMessage("Account verified, but database entry failed.");
+          }
+        } catch (dbErr) {
+          console.error("DynamoDB write failed:", dbErr);
+          setMessage("Verified successfully, but error saving user data.");
+        }
       } else {
-        setMessage(`❌ ${res.data.message}`);
+        setMessage(`${res.data.message}`);
       }
     } catch (err) {
       console.error(err);
@@ -72,73 +90,45 @@ export default function SignUp() {
         <h1 className="signup-title">Create Account</h1>
         <p className="signup-subtitle">Join NobleMart and start shopping smarter</p>
 
-        <form onSubmit={handleSubmit} className="signup-form">
+        <form className="signup-form" onSubmit={handleSubmit}>
           {error && <p className="signup-error">{error}</p>}
 
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="John Doe"
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name</label>
+              <input id="firstName" name="firstName" placeholder="John" onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input id="lastName" name="lastName" placeholder="Doe" onChange={handleChange} required />
+            </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              required
-            />
+            <input id="email" type="email" name="email" placeholder="you@example.com" onChange={handleChange} required />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-            />
+            <label htmlFor="address">Address</label>
+            <input id="address" type="text" name="address" placeholder="123 Main St, New York, NY" onChange={handleChange} required />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input id="password" type="password" name="password" placeholder="*******" onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input id="confirmPassword" type="password" name="confirmPassword" placeholder="*******" onChange={handleChange} required />
+            </div>
           </div>
 
-          <button type="submit" className="signup-btn" disabled={loading}>
-            {loading ? "Creating Account..." : "Create Account"}
-          </button>
-
-          <div className="signup-footer">
-            <span>Already have an account?</span>{" "}
-            <a href="/signin">Sign in</a>
-          </div>
+          <button type="submit" className="signup-btn">Create Account</button>
         </form>
       </div>
 
-      {/* ✅ Verification Popup */}
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup-box fade-in">

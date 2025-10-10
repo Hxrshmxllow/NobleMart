@@ -9,13 +9,24 @@
   --bg-light: #faf9fb;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg-light);
+  color: var(--text-main);
+}
+
+/* ===== Page & Container ===== */
 .signup-page {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg-light);
-  font-family: "Inter", sans-serif;
   padding: 2rem;
 }
 
@@ -23,17 +34,22 @@
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  padding: 3rem;
+  padding: 3rem 2.5rem;
   width: 100%;
-  max-width: 440px;
+  max-width: 620px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.signup-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Headings ===== */
 .signup-title {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--text-main);
   margin-bottom: 0.4rem;
 }
 
@@ -43,16 +59,25 @@
   margin-bottom: 2rem;
 }
 
+/* ===== Form Layout ===== */
 .signup-form {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.3rem;
   text-align: left;
 }
 
+/* Two-column layout for wide screens */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ===== Form Elements ===== */
 .form-group label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
   font-weight: 500;
   font-size: 0.9rem;
   color: var(--text-main);
@@ -60,7 +85,7 @@
 
 .form-group input {
   width: 100%;
-  padding: 0.9rem 1rem;
+  padding: 0.85rem 1rem;
   border: 1.5px solid var(--border);
   border-radius: 10px;
   font-size: 1rem;
@@ -73,16 +98,18 @@
   box-shadow: 0 0 0 3px rgba(224, 37, 117, 0.15);
 }
 
+/* ===== Buttons ===== */
 .signup-btn {
   background: var(--primary);
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 10px;
-  padding: 0.9rem;
+  padding: 1rem;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.25s ease, transform 0.15s ease;
+  margin-top: 0.5rem;
 }
 
 .signup-btn:hover {
@@ -90,6 +117,12 @@
   transform: translateY(-1px);
 }
 
+.signup-btn:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+}
+
+/* ===== Footer ===== */
 .signup-footer {
   margin-top: 1.5rem;
   text-align: center;
@@ -108,6 +141,7 @@
   color: var(--primary-hover);
 }
 
+/* ===== Error Box ===== */
 .signup-error {
   background: rgba(224, 37, 117, 0.1);
   color: var(--primary);
@@ -116,29 +150,10 @@
   border-radius: 8px;
   font-size: 0.9rem;
   text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-.fade-in {
-  animation: fadeSlideIn 0.4s ease forwards;
-}
-
-@keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 480px) {
-  .signup-box {
-    padding: 2rem;
-  }
-}
-
+/* ===== Popup ===== */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -153,27 +168,29 @@
 .popup-box {
   background: #fff;
   border-radius: 16px;
-  padding: 2rem;
-  width: 400px;
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 400px;
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .popup-box h2 {
   margin-bottom: 1rem;
-  color: #e02575;
+  color: var(--primary);
 }
 
 .verify-form input {
   width: 100%;
-  padding: 0.7rem;
-  border: 1px solid #ddd;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
   border-radius: 8px;
   margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 .verify-form button {
-  background: #e02575;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.7rem 1.4rem;
@@ -192,7 +209,34 @@
   opacity: 0.9;
 }
 
+/* ===== Animations ===== */
+.fade-in {
+  animation: fadeSlideIn 0.4s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* ===== Responsive Layout ===== */
+@media (max-width: 640px) {
+  .signup-box {
+    padding: 2rem 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }

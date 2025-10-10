@@ -1,26 +1,46 @@
 import { useState } from "react";
 import "./SignIn.css";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 
 export default function SignIn({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // temporary demo logic
-    if (email === "" || password === "") {
+    if (!email || !password) {
       setError("Please fill out all fields.");
       return;
     }
 
-    // TODO: replace with real backend login
-    console.log("Logging in:", { email, password });
+    setLoading(true);
     setError("");
-    if (onLogin) onLogin(email);
-    navigate("/admin");
+
+    try {
+      const res = await api.post("/auth/signin", {
+        email: email.trim().toLowerCase(),
+        password,
+      });
+      if (res.data.status === "success") {
+        const { AccessToken, IdToken, RefreshToken } = res.data.data;
+        localStorage.setItem("accessToken", AccessToken);
+        localStorage.setItem("idToken", IdToken);
+        localStorage.setItem("refreshToken", RefreshToken);
+        localStorage.setItem("userEmail", email);
+        navigate("/account");
+      } else {
+        setError(res.data.message || "Invalid credentials.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.response?.data?.message || "Server error during login.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

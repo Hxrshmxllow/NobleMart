@@ -4,6 +4,7 @@ from .routes.products import products_bp
 from .routes.cart import cart_bp
 from .routes.admin import admin_bp
 from .routes.auth import auth_bp
+from .routes.account import account_bp
 
 def create_app():
     app = Flask(__name__)
@@ -16,6 +17,7 @@ def create_app():
     app.register_blueprint(cart_bp, url_prefix="/api/cart")
     app.register_blueprint(admin_bp, url_prefix="/api/admin")     
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(account_bp, url_prefix="/api/account")
 
     @app.route("/api")
     def root():
