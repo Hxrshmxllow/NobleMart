@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import api from "../../api";
 import "./Account.css";
+import Orders from "../../components/Orders/Orders"
+import { useNavigate } from "react-router-dom";
 
 export default function Account() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("info");
   const [user, setUser] = useState({
     name: "",
@@ -19,6 +22,9 @@ export default function Account() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("idToken");
+        if(!token){
+          navigate("/signin");
+        }
         const res = await api.get("/account/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -27,6 +33,7 @@ export default function Account() {
       } catch (err) {
         console.error("Error fetching user:", err);
         setLoading(false);
+        navigate("/signin");
       }
     };
     fetchData();
@@ -47,22 +54,6 @@ export default function Account() {
       setMessage("Failed to update profile.");
     }
   };
-
-  const fetchOrders = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const res = await api.get("/orders/myorders", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOrders(res.data.orders || []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    if (activeTab === "orders") fetchOrders();
-  }, [activeTab]);
 
   if (loading) return <div className="loading">Loading your dashboard...</div>;
 
@@ -127,23 +118,7 @@ export default function Account() {
               {message && <p className="message">{message}</p>}
             </div>
           ) : (
-            <div className="orders">
-              <h2>Your Orders</h2>
-              {orders.length === 0 ? (
-                <p className="no-orders">No orders found.</p>
-              ) : (
-                <ul className="order-list">
-                  {orders.map((order, idx) => (
-                    <li key={idx} className="order-item">
-                      <p><strong>Order ID:</strong> {order.id}</p>
-                      <p><strong>Date:</strong> {order.date}</p>
-                      <p><strong>Total:</strong> ${order.total}</p>
-                      <p><strong>Status:</strong> {order.status}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <Orders />
           )}
         </div>
       </div>

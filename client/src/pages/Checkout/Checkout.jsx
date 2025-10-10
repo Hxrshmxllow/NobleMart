@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./Checkout.css";
+import api from "../../api";
 
 export default function Checkout() {
-  const [step, setStep] = useState("shipping"); // "shipping" | "payment"
-
+  const [step, setStep] = useState("shipping"); 
+  const [orderStatus, setOrderStatus] = useState("idle");   
   const [shipping, setShipping] = useState({
     fullName: "",
     email: "",
@@ -19,7 +20,8 @@ export default function Checkout() {
     cvv: "",
   });
 
-  const subtotal = 329.97;
+  const savedTotals = JSON.parse(localStorage.getItem("cartTotals")) || {};
+  const subtotal = parseFloat(savedTotals.subtotal) || 0;
   const tax = subtotal * 0.07;
   const shippingCost = subtotal > 100 ? 0 : 9.99;
   const total = subtotal + tax + shippingCost;
@@ -39,9 +41,54 @@ export default function Checkout() {
     setStep("payment");
   };
 
-  const handlePaymentSubmit = (e) => {
+  const handlePaymentSubmit = async (e) => {
     e.preventDefault();
-    alert("✅ Order confirmed! (Connect backend later)");
+    const savedCart = localStorage.getItem("cart");
+    if (!savedCart) {
+      alert("Your cart is empty!");
+      return;
+    }
+    const cartItems = JSON.parse(savedCart);
+    const orderData = {
+      items: cartItems.map((item) => ({
+        upc: item.upc,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      total: total.toFixed(2),
+      address: `${shipping.address}, ${shipping.city}, ${shipping.state} ${shipping.zip}`,
+      status: "Pending",
+    };
+
+    try {
+      const token = localStorage.getItem("idToken");
+      if (!token) {
+        alert("Please sign in first!");
+        return;
+      }
+      const res = await fetch("http://127.0.0.1:5001/api/orders/place_order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+      const data = await res.json();
+      if (res.ok && data.status === "success") {
+        setOrderStatus("success");
+        localStorage.removeItem("cart");
+        setTimeout(() => {
+          window.location.href = "/account";
+        }, 2500)
+      } else {
+        console.error("Order error:", data);
+        alert(`Failed to place order: ${data.message || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Order creation failed:", error);
+      alert("Network error. Please try again.");
+    }
   };
 
   return (
@@ -145,7 +192,7 @@ export default function Checkout() {
               />
             </div>
 
-            <div className="checkout-summary">
+            <div className="checkout-summary-1">
               <div className="summary-row">
                 <span>Subtotal</span>
                 <span>${subtotal.toFixed(2)}</span>
@@ -178,7 +225,24 @@ export default function Checkout() {
             </div>
           </form>
         )}
+
       </div>
+      {orderStatus === "processing" && (
+  <div className="order-popup processing">
+    <div className="loader"></div>
+    <p>Processing your order...</p>
+  </div>
+)}
+
+{orderStatus === "success" && (
+  <div className="order-popup success">
+    <div className="checkmark">
+      <div className="checkmark-stem"></div>
+      <div className="checkmark-kick"></div>
+    </div>
+    <p>Order placed successfully!</p>
+  </div>
+)}
     </div>
   );
 }

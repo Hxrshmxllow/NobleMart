@@ -66,6 +66,22 @@ export default function Cart() {
   const discount = promo === "SAVE10" ? subtotal * 0.1 : 0;
   const total = subtotal + tax + shipping - discount;
 
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    } else {
+      localStorage.removeItem("cart");
+    }
+    localStorage.setItem("cartTotals", JSON.stringify({
+        subtotal,
+        tax,
+        shipping,
+        discount,
+        total,
+      }));
+  }, [cartItems, promo, subtotal, tax, shipping, discount, total]);
+
+
   return (
     <div className="cart">
       <h1 className="cart-title">Your Shopping Cart</h1>

@@ -3,151 +3,143 @@
 :root {
   --primary: #e02575;
   --primary-hover: #c81d66;
-  --bg-light: #faf9fb;
+  --bg-light: #f9fafb;
   --bg-card: #ffffff;
   --text-main: #1a1a1a;
   --text-muted: #4b5563;
   --border: #e5e7eb;
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-light);
+}
+
 .checkout-page {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg-light);
+  min-height: 100vh;
   padding: 2rem;
-  font-family: "Inter", sans-serif;
+  background: var(--bg-light);
 }
 
 .checkout-wrapper {
   background: var(--bg-card);
   border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 3rem 3.5rem;
   width: 100%;
-  max-width: 600px;
-  transition: all 0.4s ease, transform 0.3s ease;
+  max-width: 650px;
+  transition: all 0.4s ease;
 }
 
 .checkout-wrapper.compact {
   max-width: 500px;
-  padding: 2.5rem;
-  transition: all 0.4s ease;
-  transform: scale(0.98);
+  padding: 2.5rem 3rem;
 }
 
 .checkout-header {
   text-align: center;
-  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  font-size: 2rem;
   color: var(--text-main);
+  margin-bottom: 2rem;
 }
 
 .checkout-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  animation: fadeSlideIn 0.4s ease;
 }
 
 .checkout-form h2 {
   font-size: 1.25rem;
-  font-weight: 600;
   color: var(--text-main);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem 1.25rem;
 }
 
-input {
-  padding: 0.9rem 1rem;
-  border: 1.5px solid var(--border);
+.form-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.checkout-form input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
   border-radius: 10px;
   font-size: 1rem;
-  outline: none;
-  color: var(--text-main);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input::placeholder {
-  color: #9ca3af;
-}
-
-input:focus {
+.checkout-form input:focus {
+  outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(224, 37, 117, 0.15);
 }
 
-.wide {
-  grid-column: span 2;
-}
-
-.checkout-summary {
-  background: var(--bg-light);
+.checkout-summary-1 {
+  margin-top: 1rem;
+  background: #fafafa;
   border-radius: 12px;
   padding: 1.5rem;
-  margin-top: 1.5rem;
+  border: 1px solid var(--border);
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  font-size: 1rem;
-  color: var(--text-muted);
   margin-bottom: 0.75rem;
+  color: var(--text-muted);
 }
 
 .summary-row.total {
-  font-weight: 600;
-  font-size: 1.1rem;
-  border-top: 1px solid var(--border);
-  padding-top: 0.75rem;
+  font-weight: 700;
   color: var(--text-main);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
 }
 
 .checkout-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.checkout-btn,
+.back-btn {
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0.9rem 1.8rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1rem;
 }
 
 .checkout-btn {
-  flex: 1;
   background: var(--primary);
-  color: white;
-  font-weight: 600;
-  padding: 1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
-  margin-top: 0px;
-
-  
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(224, 37, 117, 0.25);
 }
 
 .checkout-btn:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .back-btn {
-  flex: 1;
   background: #f3f4f6;
-  color: var(--text-main);
-  font-weight: 500;
-  padding: 1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  color: #333;
 }
 
 .back-btn:hover {
@@ -155,14 +147,13 @@ input:focus {
 }
 
 .fade-in {
-  animation: fadeSlideIn 0.4s ease forwards;
-  will-change: transform, opacity;
+  animation: fadeInUp 0.6s ease both;
 }
 
-@keyframes fadeSlideIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
@@ -170,16 +161,116 @@ input:focus {
   }
 }
 
-@media (max-width: 480px) {
-  .checkout-wrapper {
-    padding: 2rem;
-  }
+.order-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.4s ease forwards;
+  font-family: "Inter", sans-serif;
+}
 
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
+/* Processing spinner */
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--primary);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
 
-  .wide {
-    grid-column: span 1;
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success animation */
+.checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 4;
+  stroke: white;
+  stroke-miterlimit: 10;
+  margin-bottom: 1rem;
+  box-shadow: inset 0px 0px 0px var(--primary);
+  animation: fill 0.4s ease-in-out 0.4s forwards,
+             scale 0.3s ease-in-out 0.9s both;
+  position: relative;
+}
+
+.checkmark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  box-sizing: border-box;
+}
+
+.checkmark-stem {
+  position: absolute;
+  width: 6px;
+  height: 30px;
+  background: var(--primary);
+  left: 38px;
+  top: 20px;
+  transform: rotate(45deg);
+  border-radius: 3px;
+  animation: draw-stem 0.4s ease forwards 0.5s;
+}
+
+.checkmark-kick {
+  position: absolute;
+  width: 6px;
+  height: 15px;
+  background: var(--primary);
+  left: 27px;
+  top: 40px;
+  transform: rotate(-45deg);
+  border-radius: 3px;
+  animation: draw-kick 0.4s ease forwards 0.7s;
+}
+
+@keyframes draw-stem {
+  from { height: 0; opacity: 0; }
+  to { height: 30px; opacity: 1; }
+}
+
+@keyframes draw-kick {
+  from { height: 0; opacity: 0; }
+  to { height: 15px; opacity: 1; }
+}
+
+@keyframes fill {
+  100% { box-shadow: inset 0px 0px 0px 80px var(--primary); }
+}
+
+@keyframes scale {
+  0%, 100% { transform: none; }
+  50% { transform: scale3d(1.1, 1.1, 1); }
+}
+
+.order-popup p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

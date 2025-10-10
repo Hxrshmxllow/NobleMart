@@ -7,6 +7,16 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
+  const hasToken = Boolean(localStorage.getItem("accessToken"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken"); 
+    localStorage.removeItem("idToken"); 
+    localStorage.removeItem("userEmail"); 
+    navigate("/signin"); 
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll);
@@ -30,9 +40,15 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar-actions">
-          <button className="sign-btn" onClick={() => navigate("/signin")}>
-            Sign In
-          </button>
+          {hasToken ? (
+            <button className="sign-btn logout" onClick={handleLogout}>
+              Log Out
+            </button>
+          ) : (
+            <button className="sign-btn" onClick={() => navigate("/signin")}>
+              Sign In
+            </button>
+          )}
         </div>
       </div>
     </header>

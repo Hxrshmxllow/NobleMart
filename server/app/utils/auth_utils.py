@@ -98,7 +98,6 @@ def signin_user(email: str, password: str):
 
 
 def verify_cognito_token(token: str):
-    """Verify AWS Cognito JWT token using cached JWKS."""
     try:
         headers = jwt.get_unverified_headers(token)
         kid = headers.get("kid")

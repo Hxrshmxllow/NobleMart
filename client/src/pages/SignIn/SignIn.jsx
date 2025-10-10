@@ -42,7 +42,6 @@ export default function SignIn({ onLogin }) {
       setLoading(false);
     }
   };
-
   return (
     <div className="signin-page">
       <div className="signin-box fade-in">
