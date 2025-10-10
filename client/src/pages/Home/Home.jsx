@@ -15,7 +15,7 @@ export default function Home() {
   const setCache = (key, data) => {
     localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
   };
-  
+  const CACHE_TTL = 60 * 60 * 1000; 
   const getCache = (key) => {
     const cached = localStorage.getItem(key);
     if (!cached) return null;

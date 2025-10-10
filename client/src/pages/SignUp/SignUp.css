@@ -9,7 +9,6 @@
   --bg-light: #faf9fb;
 }
 
-/* PAGE LAYOUT */
 .signup-page {
   min-height: 100vh;
   display: flex;
@@ -20,7 +19,6 @@
   padding: 2rem;
 }
 
-/* CARD CONTAINER */
 .signup-box {
   background: #fff;
   border-radius: 20px;
@@ -32,7 +30,6 @@
   transition: all 0.3s ease;
 }
 
-/* HEADER */
 .signup-title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -46,7 +43,6 @@
   margin-bottom: 2rem;
 }
 
-/* FORM */
 .signup-form {
   display: flex;
   flex-direction: column;
@@ -77,7 +73,6 @@
   box-shadow: 0 0 0 3px rgba(224, 37, 117, 0.15);
 }
 
-/* BUTTON */
 .signup-btn {
   background: var(--primary);
   color: white;
@@ -95,7 +90,6 @@
   transform: translateY(-1px);
 }
 
-/* FOOTER */
 .signup-footer {
   margin-top: 1.5rem;
   text-align: center;
@@ -114,7 +108,6 @@
   color: var(--primary-hover);
 }
 
-/* ERROR */
 .signup-error {
   background: rgba(224, 37, 117, 0.1);
   color: var(--primary);
@@ -125,7 +118,6 @@
   text-align: center;
 }
 
-/* ANIMATION */
 .fade-in {
   animation: fadeSlideIn 0.4s ease forwards;
 }
@@ -141,9 +133,66 @@
   }
 }
 
-/* RESPONSIVE */
 @media (max-width: 480px) {
   .signup-box {
     padding: 2rem;
   }
+}
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4000;
+  animation: fadeIn 0.25s ease;
+}
+
+.popup-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.popup-box h2 {
+  margin-bottom: 1rem;
+  color: #e02575;
+}
+
+.verify-form input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.verify-form button {
+  background: #e02575;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 0 0.3rem;
+}
+
+.verify-form .cancel-btn {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.verify-form button:hover {
+  opacity: 0.9;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
