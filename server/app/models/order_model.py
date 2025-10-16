@@ -1,7 +1,7 @@
 import uuid
 import boto3
 from datetime import datetime
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal, ROUND_HALF_UP
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
@@ -56,3 +56,52 @@ def get_order_details(account_number: str, order_number: str):
     except Exception as e:
         print(f"[ERROR] get_order_details: {e}")
         return {"status": "error", "message": str(e)}
+
+
+def get_all_orders(status: str):
+    if status == "pending":
+        try:
+            response = orders_table.scan(
+                FilterExpression=Attr("status").ne("Delivered")
+            )
+            return {"status": "success", "orders": response.get("Items", [])}
+        except Exception as e:
+            print(f"[ERROR] get_all_orders_{status}: {e}")
+            return {"status": "error", "message": str(e)}
+    else:
+        try:
+            response = orders_table.scan(
+                FilterExpression=Attr("status").eq(status)
+            )
+            return {"status": "success", "orders": response.get("Items", [])}
+        except Exception as e:
+            print(f"[ERROR] get_all_orders_{status}: {e}")
+            return {"status": "error", "message": str(e)}
+        
+def update_order(accountNumber, orderNumber, status):
+    try:
+        response = orders_table.update_item(
+            Key={
+                'accountNumber': accountNumber,  
+                'orderNumber': orderNumber       
+            },
+            UpdateExpression="SET #s = :new_status",
+            ExpressionAttributeNames={
+                '#s': 'status'
+            },
+            ExpressionAttributeValues={
+                ':new_status': status
+            },
+            ConditionExpression="attribute_exists(accountNumber) AND attribute_exists(orderNumber)",
+            ReturnValues="ALL_NEW"
+        )
+
+        print("✅ Order status updated successfully!")
+        return response['Attributes']
+
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+            print("⚠️ Order does not exist — no update made.")
+        else:
+            print(f"❌ Failed to update order: {e.response['Error']['Message']}")
+        return None

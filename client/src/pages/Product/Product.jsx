@@ -10,6 +10,7 @@ export default function ProductPage() {
   const [notes, setNotes] = useState([]);
   const [adding, setAdding] = useState(false);
   const [message, setMessage] = useState("");
+  const [popup, setPopup] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,8 +25,7 @@ export default function ProductPage() {
   }, [upc]);
 
   const handleAddToCart = (product) => {
-    setAdding(true);
-    setMessage("");
+    setPopup("adding");
     try {
       const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
       const existingItem = existingCart.find((item) => item.upc === product.upc);
@@ -40,19 +40,17 @@ export default function ProductPage() {
         updatedCart = [...existingCart, { ...product, quantity: 1 }];
       }
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-      setMessage("Added to cart!");
+      setPopup("success");
+      setTimeout(() => setPopup(null), 1800);
     } catch (err) {
       console.error("Error adding to cart:", err);
-      setMessage("Error adding item.");
-    } finally {
-      setAdding(false);
+      setPopup("error");
+      setTimeout(() => setPopup(null), 2000);
     }
   };
 
   const handleToggleNotes = () => {
     if (!showNotes && notes.length === 0) {
-      // Simulate AI scent note generation
       setNotes([
         { label: "Vanilla Woody", percent: 80 },
         { label: "Amber Citrus", percent: 60 },
@@ -114,6 +112,33 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+      {popup === "adding" && (
+          <div className="popup-overlay adding">
+            <div className="loader"></div>
+            <p>Adding to cart...</p>
+          </div>
+        )}
+
+        {popup === "success" && (
+          <div className="popup-overlay success">
+            <div className="checkmark">
+              <div className="checkmark-stem"></div>
+              <div className="checkmark-kick"></div>
+            </div>
+            <p>Added to cart!</p>
+          </div>
+        )}
+
+        {popup === "error" && (
+          <div className="popup-overlay error">
+            <div className="crossmark">
+              <div className="crossmark-line left"></div>
+              <div className="crossmark-line right"></div>
+            </div>
+            <p>Failed to add item.</p>
+          </div>
+        )}
     </div>
+    
   );
 }

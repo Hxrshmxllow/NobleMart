@@ -209,6 +209,11 @@ body {
   opacity: 0.9;
 }
 
+.popup-box-p{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 /* ===== Animations ===== */
 .fade-in {
   animation: fadeSlideIn 0.4s ease forwards;

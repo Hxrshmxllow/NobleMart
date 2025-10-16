@@ -44,7 +44,6 @@ def create_order(current_user):
         print("[ERROR] create_order:", e)
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @orders_bp.route("/myorders", methods=["GET"])
 @token_required
 def get_my_orders(current_user):
@@ -74,7 +73,6 @@ def get_order(current_user, order_number):
             item['brand'] = res.get('brand')
             item['name'] = res.get('name')
             item['image'] = res.get('image')
-        print(result)
         return jsonify(result), (200 if result["status"] == "success" else 404)
     except Exception as e:
         print("[ERROR] get_order:", e)

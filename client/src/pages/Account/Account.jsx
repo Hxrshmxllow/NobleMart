@@ -39,6 +39,12 @@ export default function Account() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if(user.isAdmin){
+      navigate('/admin');
+    }
+  }, [user]);
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -54,6 +60,8 @@ export default function Account() {
       setMessage("Failed to update profile.");
     }
   };
+
+  
 
   if (loading) return <div className="loading">Loading your dashboard...</div>;
 

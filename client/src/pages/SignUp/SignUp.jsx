@@ -133,7 +133,7 @@ export default function SignUp() {
         <div className="popup-overlay">
           <div className="popup-box fade-in">
             <h2>Email Verification</h2>
-            <p>{message}</p>
+            <p className="popup-box-p">{message}</p>
             <form onSubmit={handleConfirm} className="verify-form">
               <input
                 type="text"
