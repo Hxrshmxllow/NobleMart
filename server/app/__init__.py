@@ -16,7 +16,7 @@ def create_app():
 
     CORS(
         app,
-        origins=["http://localhost:5173"],
+        origins=["http://localhost:5173", "http://noblemart.s3-website-us-east-1.amazonaws.com"],
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
         expose_headers=["Authorization"],

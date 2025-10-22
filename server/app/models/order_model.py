@@ -32,7 +32,6 @@ def put_order(account_number: str, items: list, total: str, address: str, status
         print(f"[ERROR] put_order: {e}")
         return {"status": "error", "message": str(e)}
 
-
 def get_orders_by_user(account_number: str):
     try:
         response = orders_table.query(
@@ -42,7 +41,6 @@ def get_orders_by_user(account_number: str):
     except Exception as e:
         print(f"[ERROR] get_orders_by_user: {e}")
         return {"status": "error", "message": str(e)}
-
 
 def get_order_details(account_number: str, order_number: str):
     try:
@@ -56,7 +54,6 @@ def get_order_details(account_number: str, order_number: str):
     except Exception as e:
         print(f"[ERROR] get_order_details: {e}")
         return {"status": "error", "message": str(e)}
-
 
 def get_all_orders(status: str):
     if status == "pending":

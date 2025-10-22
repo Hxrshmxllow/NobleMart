@@ -41,3 +41,123 @@
 .read-the-docs {
   color: #888;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.5s ease;
+}
+
+.popup-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  color: #fff;
+  max-width: 460px;
+  width: 90%;
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.popup-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #e02575, #ff66a6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.popup-message {
+  font-size: 1.05rem;
+  color: #f1f1f1;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.popup-button {
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.01em;
+}
+
+.popup-button.primary {
+  background: linear-gradient(135deg, #e02575, #ff66a6);
+  color: white;
+  box-shadow: 0 0 20px rgba(224, 37, 117, 0.3);
+}
+
+.popup-button.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(224, 37, 117, 0.5);
+}
+
+.popup-button.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.popup-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-card {
+    padding: 2rem 1.5rem;
+  }
+  .popup-title {
+    font-size: 1.5rem;
+  }
+  .popup-message {
+    font-size: 0.95rem;
+  }
+}
